@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SecureAccess · Құпиясөздік қорғау</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#0f172a;--mu:#64748b;--ac:#4f46e5;--ac2:#06b6d4;--bd:#e2e8f0;--ok:#16a34a;--bad:#dc2626;--in:#f1f5f9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#151b2f;--tx:#e8ecf8;--mu:#93a0bd;--bd:#26304d;--in:#0e1428;--ac:#818cf8}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#151b2f;--tx:#e8ecf8;--mu:#93a0bd;--bd:#26304d;--in:#0e1428;--ac:#818cf8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;
+background-image:radial-gradient(600px 400px at 85% -5%,rgba(99,102,241,.25),transparent),radial-gradient(500px 380px at -5% 90%,rgba(6,182,212,.18),transparent)}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;padding:18px 20px}
+.logo{font-weight:800;font-size:19px;display:flex;gap:10px;align-items:center}
+.logo i{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;font-style:normal;color:#fff}
+.theme{background:var(--card);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:15px}
+main{max-width:1080px;margin:0 auto;padding:10px 20px 50px;display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center}
+@media(max-width:860px){main{grid-template-columns:1fr;gap:26px}}
+.badge{display:inline-block;padding:6px 12px;border-radius:99px;background:rgba(99,102,241,.14);color:var(--ac);font-size:13px;font-weight:600}
+h1{font-size:clamp(30px,5vw,50px);line-height:1.1;margin:16px 0;letter-spacing:-.02em}
+h1 span{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mu);font-size:17px;line-height:1.6;max-width:480px}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px;max-width:480px}
+.feat div{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;font-size:14px}
+.feat b{display:block;font-size:20px;margin-bottom:4px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:26px;box-shadow:0 20px 50px -20px rgba(79,70,229,.35)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--in);border-radius:12px;padding:4px;margin-bottom:20px}
+.tabs button{border:0;background:none;color:var(--mu);padding:10px;border-radius:9px;font-weight:700;font-size:15px;cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--tx);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+label{display:block;font-size:13px;font-weight:600;color:var(--mu);margin:14px 0 6px}
+input,select{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--bd);background:var(--in);color:var(--tx);font-size:16px;outline:none;font-family:inherit}
+input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 4px rgba(99,102,241,.18)}
+.pw{position:relative}.pw button{position:absolute;right:8px;top:7px;border:0;background:none;font-size:18px;cursor:pointer;color:var(--mu)}
+.bar{height:6px;background:var(--in);border-radius:9px;margin:10px 0 8px;overflow:hidden}.bar i{display:block;height:100%;width:0;transition:.3s;background:var(--bad)}
+.rules{list-style:none;margin:0;padding:0;font-size:13px;color:var(--mu);display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+.rules li::before{content:"○ ";}.rules li.ok{color:var(--ok)}.rules li.ok::before{content:"● "}
+.go{width:100%;margin-top:20px;padding:14px;border:0;border-radius:12px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--ac),#6d5ff0 50%,var(--ac2));box-shadow:0 10px 24px -8px rgba(79,70,229,.6)}
+.go:disabled{opacity:.5;cursor:not-allowed}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0}
+.chips button{border:1.5px solid var(--bd);background:var(--in);color:var(--tx);border-radius:99px;padding:8px 13px;font-size:13px;font-weight:600;cursor:pointer}
+.chips button.on{border-color:var(--ac);background:rgba(99,102,241,.14);color:var(--ac)}
+.prompt{margin-top:16px;padding:12px 14px;border-radius:12px;background:rgba(99,102,241,.1);color:var(--ac);font-weight:700}
+.dots{display:flex;gap:7px;align-items:center;justify-content:flex-end;margin-top:14px;font-size:13px;color:var(--mu)}
+.dots i{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--mu)}.dots i.u{background:var(--bad);border-color:var(--bad)}
+.msg{margin-top:14px;font-size:14px;font-weight:600;min-height:20px}.msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+.otp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.otp code{background:var(--in);border:1px dashed var(--ac);padding:10px;border-radius:10px;text-align:center;font-size:16px;letter-spacing:.08em;font-weight:700}
+.welcome{text-align:center;padding:14px 0}.welcome .big{font-size:52px}
+.ghost{background:none;border:1.5px solid var(--bd);color:var(--tx);box-shadow:none}
+#db{max-width:1080px;margin:0 auto;padding:0 20px 60px}
+.dbc{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:22px}
+.dbh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.dbh h2{margin:0;font-size:20px}.dbh .cnt{background:rgba(99,102,241,.14);color:var(--ac);border-radius:99px;padding:3px 10px;font-size:13px;margin-left:8px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600}
+td code{font-size:12px;color:var(--ac)}
+.del,.clr{border:1px solid var(--bd);background:var(--in);color:var(--bad);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;font-weight:600}
+.empty{color:var(--mu);text-align:center;padding:26px 0;font-size:14px}
+.tcode{font-size:36px;font-weight:800;letter-spacing:.15em;text-align:center;color:var(--ac);margin:12px 0 4px;font-variant-numeric:tabular-nums}.demo{margin-top:18px;padding-top:14px;border-top:1px dashed var(--bd)}
+small.hint{color:var(--mu);font-size:12px}
+</style></head>
+<body>
+<nav><div class="logo"><i>🔐</i>SecureAccess</div><div style="display:flex;gap:8px"><a class="theme" id="dbl" href="#db" style="display:none;text-decoration:none;font-size:14px">🗄 Дерекқор</a><button class="theme" id="th" aria-label="Тақырып">🌓</button></div></nav>
+<main>
+<section>
+<span class="badge">Зертханалық жұмыс №1 · Аутентификация</span>
+<h1>Құпиясөзбен <span>сенімді қорғаныс</span></h1>
+<p class="lead">Тіркеліңіз, құпиясөз талаптарын тексеріңіз және кірудің үш әдісін байқап көріңіз: құпиясөз, бір реттік құпиясөздер, сұрақ–жауап.</p>
+<div class="feat"><div><b>SHA-256</b>құпиясөз хэш + тұз түрінде</div><div><b>3 әрекет</b>содан кейін блоктау</div><div><b>4 әдіс</b>бір жүйеде</div><div><b>Талаптар</b>ұзындық, топтар, сөздік</div></div>
+</section>
+<section class="card" id="card"></section>
+</main>
+<section id="db" style="display:none"><div class="dbc"><div class="dbh"><h2>🗄 Тіркелген аккаунттар<span class="cnt" id="cnt">0</span></h2><button class="clr" onclick="clearDB()">Барлығын тазалау</button></div><div class="tw" id="dbt"></div><small class="hint">Деректер браузердің жадында (localStorage) сақталады: бетті жаңартсаңыз да аккаунттар жоғалмайды. Құпиясөздер ашық түрде емес, тек тұз бен хэш түрінде.</small></div></section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),card=$('#card');
+const MAX=3,COMMON=['password','qwerty','12345678','123456789','admin123','karaganda','qazaqstan'];
+const QS=['Сүйікті түсіңіз?','Үй жануарыңыздың аты?','Туған қалаңыз?'];
+let mem={};let session=null;let DB=null,UID=null,CAN=false,DIR=[],lastS='{}',q=Promise.resolve();
+const load=()=>{try{return JSON.parse(localStorage.getItem('lab1_users')||'{}')}catch(e){return mem}};
+const save=u=>{mem=u;try{localStorage.setItem('lab1_users',JSON.stringify(u))}catch(e){};renderDB();syncDB()};
+const OK_ID=/^[\w.~:@+-]+$/;
+function syncDB(){if(!DB||!UID)return;const u=load(),ac={};Object.entries(u).forEach(([l,r])=>{if(l!=='admin'&&OK_ID.test(l))ac[l]={t:r.t||0,tfa:!!r.tfa,otpI:r.otpI||0,role:r.role||'user'}});const j=JSON.stringify(ac);if(j===lastS)return;lastS=j;q=q.then(()=>DB.doc('directory/'+UID).set({uid:UID,updated:Date.now(),accts:ac})).catch(()=>{})}
+function pushPriv(l){if(!DB||!UID||!OK_ID.test(l)||!load()[l])return;q=q.then(()=>DB.doc('data/users/'+UID+'/acct~'+l).set({rec:load()[l]})).catch(()=>{})}
+async function initDB(){try{if(typeof claude==='undefined')return;const[db,us]=await Promise.all([claude.use('db'),claude.use('user')]);if(!db||!us)return;DB=db;UID=await us.id();CAN=!!(await us.canEdit());
+if(UID){const sn=await DB.collection('data/users/'+UID).get(),u=load();let ch=false;sn.docs.forEach(d=>{if(d.id.startsWith('acct~')&&d.data().rec){const l=d.id.slice(5);if(!u[l]){u[l]=d.data().rec;ch=true}}});if(ch){mem=u;try{localStorage.setItem('lab1_users',JSON.stringify(u))}catch(e){}}}
+if(CAN)DB.collection('directory').onSnapshot(sn=>{DIR=sn.docs.map(d=>d.data());renderDB()},()=>{});
+syncDB();renderDB()}catch(e){}}
+function renderDir(){const esc=t=>String(t).replace(/[<>&"']/g,'');const rows=[];DIR.forEach(d=>Object.entries(d.accts||{}).forEach(([l,a])=>rows.push({uid:d.uid,l,...a})));rows.sort((a,b)=>(a.t||0)-(b.t||0));$('#cnt').textContent=rows.length;
+$('#dbt').innerHTML=rows.length?`<table><tr><th>№</th><th>Логин</th><th>Пайдаланушы ID</th><th>Тіркелген уақыты</th><th>2FA</th><th>Бір реттік</th></tr>${rows.map((r,i)=>`<tr><td>${i+1}</td><td><b>${esc(r.l)}</b></td><td><code>${esc(String(r.uid).slice(0,10))}…</code></td><td>${r.t?new Date(r.t).toLocaleString('kk-KZ'):'—'}</td><td>${r.tfa?'✅ TOTP':'—'}</td><td>${r.otpI}/4 қолданылды</td></tr>`).join('')}</table>`:'<div class="empty">Дерекқорда әзірге аккаунт жоқ.</div>';document.querySelector('.clr').style.display='none'}
+function renderDB(){const dbm=!!DB&&CAN;const adm=dbm||(!!session&&session.role==='admin');$('#db').style.display=adm?'block':'none';$('#dbl').style.display=adm?'':'none';if(!adm)return;if(dbm){renderDir();return}document.querySelector('.clr').style.display='';const u=load(),k=Object.keys(u);$('#cnt').textContent=k.length;const e=t=>t.replace(/[<>&"]/g,'');
+$('#dbt').innerHTML=k.length?`<table><tr><th>№</th><th>Логин</th><th>Тұз (salt)</th><th>SHA-256 хэш</th><th>Тіркелген уақыты</th><th>Бір реттік</th><th>2FA</th><th>Рөл</th><th></th></tr>${k.map((l,i)=>`<tr><td>${i+1}</td><td><b>${e(l)}</b></td><td><code>${u[l].salt}</code></td><td><code>${u[l].pw.slice(0,20)}…</code></td><td>${u[l].t?new Date(u[l].t).toLocaleString('kk-KZ'):'—'}</td><td>${u[l].otpI}/4 қолданылды</td><td>${u[l].tfa?'✅ TOTP':'—'}</td><td>${u[l].role==='admin'?'🛡 Әкімші':'Пайдаланушы'} ${l!=='admin'?`<button class="del" style="color:var(--ac)" onclick="setRole('${e(l)}')">${u[l].role==='admin'?'Алу':'Админ ету'}</button>`:''}</td><td><button class="del" onclick="delU('${e(l)}')">Жою</button></td></tr>`).join('')}</table>`:'<div class="empty">Әзірге аккаунт жоқ. Жоғарыдан тіркеліңіз.</div>'}
+function delU(l){if(l==='admin'||(session&&l===session.login))return;const u=load();delete u[l];save(u)}
+function setRole(l){const u=load();if(!u[l]||l==='admin')return;u[l].role=u[l].role==='admin'?'user':'admin';save(u)}
+function clearDB(){const u=load();save(Object.fromEntries(Object.entries(u).filter(([k])=>k==='admin'||(session&&k===session.login))))}
+async function mk(p,q,a,role,tf){const s=salt(),ch=[...p],codes=Array.from({length:4},()=>String(Math.floor(1e5+Math.random()*9e5)));
+return{codes,rec:{salt:s,pw:await sha(s+p),chars:await Promise.all(ch.map((c,i)=>sha(s+i+c))),len:ch.length,otp:await Promise.all(codes.map(c=>sha(s+c))),otpI:0,t:Date.now(),role,tfa:tf!==false,sec:b32e(crypto.getRandomValues(new Uint8Array(20))),q,qa:await sha(s+a.trim().toLowerCase()),cap:await sha(s+'астана')}}}
+async function seed(){const u=load();if(u.admin&&!u.admin.sec){u.admin.sec=b32e(crypto.getRandomValues(new Uint8Array(20)));u.admin.tfa=true;save(u)}if(!u.admin){const r=await mk('Admin@2026','Сүйікті түсіңіз?','көк','admin');u.admin=r.rec;save(u)}}
+const B32='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32e(x){let b='',o='';for(const v of x)b+=v.toString(2).padStart(8,'0');for(let i=0;i<b.length;i+=5)o+=B32[parseInt(b.slice(i,i+5).padEnd(5,'0'),2)];return o}
+function b32d(t){let b='';for(const c of t)b+=B32.indexOf(c).toString(2).padStart(5,'0');const r=[];for(let i=0;i+8<=b.length;i+=8)r.push(parseInt(b.slice(i,i+8),2));return new Uint8Array(r)}
+async function totp(sec,t=Date.now()){const k=await crypto.subtle.importKey('raw',b32d(sec),{name:'HMAC',hash:'SHA-1'},false,['sign']);let c=Math.floor(t/30000);const m=new Uint8Array(8);for(let i=7;i>=0;i--){m[i]=c&255;c=Math.floor(c/256)}const h=new Uint8Array(await crypto.subtle.sign('HMAC',k,m)),o=h[19]&15;return String(((h[o]&127)<<24|h[o+1]<<16|h[o+2]<<8|h[o+3])%1e6).padStart(6,'0')}
+function tfaView(){S.a=0;S.lock=false;S.demo=false;renderTfa()}
+function renderTfa(msg){const dots=Array.from({length:MAX},(_,i)=>`<i class="${i<S.a?'u':''}"></i>`).join('');
+card.innerHTML=tabs('l')+`<div class="prompt">🔑 2-қадам: аутентификатордағы 6 таңбалы кодты енгізіңіз</div><label>Код</label><input id="tc" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="000000" ${S.lock?'disabled':''}>
+<div class="dots">Әрекет: ${dots}</div><button class="go" id="tg" ${S.lock?'disabled':''}>Растау</button><div class="msg bad">${msg||''}</div>
+<div class="demo"><small class="hint">Телефон жоқ па? Код жіберілмейді, ол уақыт пен құпия кілттен есептеледі (TOTP, RFC 6238).</small><button class="go ghost" id="dm">👁 Демо-аутентификатор</button><div id="dv"></div></div>${S.lock?'<button class="go ghost" onclick="logView()">Қайта бастау</button>':''}`;
+if(!S.lock){$('#tc').focus();$('#tc').onkeydown=e=>{if(e.key=='Enter')tfaCheck()}}$('#tg').onclick=tfaCheck;$('#dm').onclick=()=>{S.demo=true;tick()};if(S.demo)tick()}
+async function tfaCheck(){const v=$('#tc').value.replace(/\s/g,'');let ok=false;for(const d of[-1,0,1])if(v===await totp(S.user.sec,Date.now()+d*30000))ok=true;
+if(ok)return done();S.a++;if(S.a>=MAX){S.lock=true;renderTfa('⛔ Жүйеге кіруге тыйым салынады.')}else renderTfa('✖ Қате код. Қалған әрекет: '+(MAX-S.a))}
+async function tick(){if(!S.demo||!S.user||!$('#dv'))return;const c=await totp(S.user.sec),r=30-Math.floor(Date.now()/1000)%30;if($('#dv'))$('#dv').innerHTML=`<div class="tcode">${c.slice(0,3)} ${c.slice(3)}</div><div class="bar"><i style="width:${r/30*100}%;background:var(--ac2)"></i></div><small class="hint">Жаңарады: ${r} с</small>`}
+setInterval(tick,1000);
+function logout(){session=null;renderDB();logView()}
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+const salt=()=>[...crypto.getRandomValues(new Uint8Array(8))].map(x=>x.toString(16).padStart(2,'0')).join('');
+$('#th').onclick=()=>{const r=document.documentElement,d=matchMedia('(prefers-color-scheme:dark)').matches;const cur=r.dataset.theme||(d?'dark':'light');r.dataset.theme=cur==='dark'?'light':'dark'};
+
+function rules(p,l){return[['8+ таңба',p.length>=8],['3 топ (aA1!)',[/[a-zа-яәіңғүұқөһ]/,/[A-ZА-ЯӘІҢҒҮҰҚӨҺ]/,/\d/,/[^\w\s]/].filter(r=>r.test(p)).length>=3],['Сөздікте жоқ',p&&!COMMON.includes(p.toLowerCase())],['Логинге тең емес',p&&p.toLowerCase()!==l.toLowerCase()]]}
+
+function tabs(a){return`<div class="tabs"><button class="${a=='r'?'on':''}" onclick="view('r')">Тіркелу</button><button class="${a=='l'?'on':''}" onclick="view('l')">Кіру</button></div>`}
+function view(v){v=='r'?regView():logView()}
+
+function regView(){
+card.innerHTML=tabs('r')+`<label>Логин</label><input id="rl" autocomplete="off" placeholder="student01">
+<label>Құпиясөз</label><div class="pw"><input id="rp" type="password" placeholder="••••••••"><button type="button" id="eye">👁</button></div>
+<div class="bar"><i id="bar"></i></div><ul class="rules" id="rules"></ul>
+<label>Жеке сұрақ (сұрақ–жауап әдісі үшін)</label><select id="rq">${QS.map(q=>`<option>${q}</option>`).join('')}</select>
+<input id="ra" style="margin-top:8px" placeholder="Жауап">
+<label style="display:flex;gap:8px;align-items:center;margin-top:16px;cursor:pointer;color:var(--tx)"><input type="checkbox" id="r2" checked style="width:auto"> Екі факторлы аутентификация (2FA, TOTP)</label>
+<button class="go" id="rg" disabled>Тіркелу</button><div class="msg" id="rm"></div>`;
+const upd=()=>{const r=rules($('#rp').value,$('#rl').value),n=r.filter(x=>x[1]).length;$('#rules').innerHTML=r.map(x=>`<li class="${x[1]?'ok':''}">${x[0]}</li>`).join('');const b=$('#bar');b.style.width=n*25+'%';b.style.background=n<3?'var(--bad)':n<4?'#f59e0b':'var(--ok)';$('#rg').disabled=n<4||!$('#rl').value.trim()||!$('#ra').value.trim()};
+['rl','rp','ra'].forEach(i=>$('#'+i).oninput=upd);upd();
+$('#eye').onclick=()=>{const p=$('#rp');p.type=p.type=='password'?'text':'password'};
+$('#rg').onclick=register}
+
+async function register(){
+const u=load(),lg=$('#rl').value.trim().toLowerCase();
+if(u[lg]){$('#rm').className='msg bad';$('#rm').textContent='Бұл логин бос емес';return}
+const{rec,codes}=await mk($('#rp').value,$('#rq').value,$('#ra').value,'user',$('#r2').checked);u[lg]=rec;save(u);pushPriv(lg);
+card.innerHTML=`<div class="welcome"><div class="big">🎉</div><h3>Тіркелу сәтті өтті</h3></div>
+${rec.tfa?`<small class="hint">2FA кілті: аутентификатор қосымшасына (Google/Microsoft Authenticator) енгізіңіз немесе QR сканерлеңіз:</small><div class="otp" style="grid-template-columns:1fr"><code style="font-size:14px;word-break:break-all">${rec.sec}</code></div><div id="qr" style="display:flex;justify-content:center;background:#fff;padding:8px;border-radius:12px;margin-bottom:10px"></div>`:''}<small class="hint">Бір реттік құпиясөздер тізімі — сақтап қойыңыз, әрқайсысы бір рет қана жарайды:</small>
+<div class="otp">${codes.map(c=>`<code>${c}</code>`).join('')}</div>
+<button class="go" onclick="logView('${lg}')">Кіруге өту</button>`;if(rec.tfa)try{new QRCode($('#qr'),{text:`otpauth://totp/SecureAccess:${lg}?secret=${rec.sec}&issuer=SecureAccess`,width:150,height:150})}catch(e){}}
+
+let S={};
+function logView(pre){S={a:0,m:'pw',user:null,lock:false};
+card.innerHTML=tabs('l')+`<label>Логин</label><input id="ll" autocomplete="off" value="${pre||''}" placeholder="student01">
+<button class="go" id="lg">Жалғастыру</button><div class="msg" id="lm"></div>`;
+$('#lg').onclick=()=>{const l=$('#ll').value.trim().toLowerCase(),u=load()[l];if(!u){$('#lm').className='msg bad';$('#lm').textContent='Пайдаланушы табылмады. Алдымен тіркеліңіз.';return}S.user=u;S.login=l;chal()};
+$('#ll').onkeydown=e=>{if(e.key=='Enter')$('#lg').click()}}
+
+function newQ(){const u=S.user;if(S.m=='ch'){const a=Math.floor(Math.random()*u.len);let b;do{b=Math.floor(Math.random()*u.len)}while(b==a&&u.len>1);S.pos=[a,b].sort((x,y)=>x-y);S.p=`${S.pos[0]+1}-ші және ${S.pos[1]+1}-ші таңбаны енгізіңіз`}
+else if(S.m=='qa'){S.qi=Math.random()<.5?0:1;S.p=S.qi?u.q:'Қазақстанның астанасы?'}
+else if(S.m=='ot')S.p=u.otpI<4?`Бір реттік құпиясөз №${u.otpI+1}`:'Тізім таусылды';
+else S.p='Құпиясөзді енгізіңіз'}
+const M=[['pw','Құпиясөз'],['ot','Бір реттік'],['qa','Сұрақ–жауап']];
+function chal(){newQ();const dots=Array.from({length:MAX},(_,i)=>`<i class="${i<S.a?'u':''}"></i>`).join('');
+card.innerHTML=tabs('l')+`<div class="chips">${M.map(m=>`<button class="${S.m==m[0]?'on':''}" ${S.lock||S.a?'disabled':''} onclick="S.m='${m[0]}';chal()">${m[1]}</button>`).join('')}</div>
+<div class="prompt">${S.p}</div><label>Жауап</label><input id="ca" type="${S.m=='pw'||S.m=='ot'?'password':'text'}" autocomplete="off" ${S.lock?'disabled':''}>
+<div class="dots">Әрекет: ${dots}</div><button class="go" id="cg" ${S.lock?'disabled':''}>Кіру</button>
+<div class="msg ${S.msgc||''}" id="cm">${S.msg||''}</div>${S.lock?'<button class="go ghost" onclick="logView()">Қайта бастау</button>':''}`;
+S.msg='';const i=$('#ca');if(i&&!S.lock){i.focus();i.onkeydown=e=>{if(e.key=='Enter')check()}}$('#cg').onclick=check}
+
+async function check(){const u=S.user,v=$('#ca').value;let ok=false;
+if(S.m=='pw')ok=await sha(u.salt+v)==u.pw;
+else if(S.m=='ch')ok=v.length==2&&await sha(u.salt+S.pos[0]+v[0])==u.chars[S.pos[0]]&&await sha(u.salt+S.pos[1]+v[1])==u.chars[S.pos[1]];
+else if(S.m=='ot'){ok=u.otpI<4&&await sha(u.salt+v)==u.otp[u.otpI];if(ok){u.otpI++;const all=load();all[S.login]=u;save(all);pushPriv(S.login)}}
+else ok=await sha(u.salt+v.trim().toLowerCase())==(S.qi?u.qa:u.cap);
+if(ok)return S.user.tfa?tfaView():done();
+S.a++;if(S.a>=MAX){S.lock=true;S.msg='⛔ Жүйеге кіруге тыйым салынады.'}else S.msg='✖ Қате. Қалған әрекет: '+(MAX-S.a);S.msgc='bad';chal()}
+
+function done(){session={login:S.login,role:S.user.role||'user'};const adm=session.role==='admin';renderDB();
+card.innerHTML=`<div class="welcome"><div class="big">${adm?'🛡':'✅'}</div><h3>Түпнұсқалығы орнатылды</h3><p class="lead" style="margin:8px auto">Қош келдіңіз, <b>${S.login.replace(/[<>&]/g,'')}</b>! ${adm?'Сіз әкімшісіз: төменде аккаунттар дерекқоры ашылды.':'Дерекқорды тек әкімшілер көре алады.'}</p></div>${adm?'<a class="go" style="display:block;text-align:center;text-decoration:none" href="#db">Дерекқорды ашу</a>':''}<button class="go ghost" onclick="logout()">Шығу</button>`}
+initDB();seed();regView();renderDB();
+</script></body></html>
